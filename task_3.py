@@ -1,6 +1,6 @@
 import os  # импортируем для создания платформо-независимых путей
 
-list_with_files = ['2.txt', '3.txt', '1.txt']
+list_with_files = ['3.txt', '2.txt', '1.txt']
 
 
 def get_content_name_length_from_file(file_name):
@@ -48,16 +48,13 @@ def second_output():
     list_of_all_contents = []
     for i in get_list_of_contents_of_files():
         list_of_all_contents.append(list(i[0]))
-    list_of_all_contents[0].extend(list_of_all_contents[1])  # делаем так, что первый вложенный список поглащает
-    # второй, а затем и третий. И в итоге остается единый список без вложений
-    list_of_all_contents[0].extend(list_of_all_contents[2])
-    k = (list_of_all_contents[0])  # просто, чтобы лучше читалось
-    return [print(i) for i in k]  # 2-й вывод информации
+    for index in range((len(list_of_all_contents)) - 1):
+        list_of_all_contents[0].extend(list_of_all_contents[index + 1])  # делаем так, что первый вложенный список поглащает
+        # # второй, а затем и третий. И в итоге остается единый список без вложений
+    return [print(i) for i in list_of_all_contents[0]]  # 2-й вывод информации
 
 
 if __name__ == '__main__':
-    get_list_of_names_of_files()
-    get_list_of_lengths_of_files()
     first_output()
     second_output()
 
