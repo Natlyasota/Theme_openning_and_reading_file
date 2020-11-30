@@ -1,33 +1,65 @@
 from pprint import pprint
+import os
 
-with open(r'/Users/USER/Desktop/Open and reading file/py-homework-basic-files/2.4.files/recipes.txt') as f:
-    cook_book = {} # создаем переменную-слварь для окончательного результата всей задачи
-    row = f.readline() # создаем переменную для построчного чтения
-    while row != '': # ставим условие выполнения задачи до тех пор, пока построчное чтение не закончится
+file_path = os.path.join(os.getcwd(), 'recipes.txt')
+with open(file_path) as f:
+    cook_book = {}
+    name_of_specific_dish = f.readline()
 
-        count_of_ingr_in_recept = int(f.readline()) # переменная показывает, сколько ингредиентов должно быть в одном рецепте. Тут мы как бы говорим питону - возьми и пройдись по каждой строке и найди а ней строку, в которой есть число и сделай эту строку числом
-        dict_of_all_ingr_of_one_dish = {} # создаем пустой словарь для каждого рецепта блюда с полным описанием
-        final_variant_dish_description = [] # здесь полное описание каждого ингредиента по типу {'ingredient_name': 'Яйцо ', 'measure': 'шт', 'quantity': '2'}
+    while name_of_specific_dish:
+        count_of_ingredient = int(f.readline())
+        final_variant_dish_description = []
+        dict_of_all_ingredients_of_one_dish = {}
 
-        for i in range(count_of_ingr_in_recept): # а раз count_of_ingr_in_recept у нас в данном случае включает цифры 3, 4, 3, 5 это значит, что сначала мы питерируемся в диапазоне 3, потом 4, потом 3, потом 5
-            a = f.readline().split('|') # говорим, чтобы питон 'расщипил' наш текст запятыми на месте символа '|'
+        for i in range(count_of_ingredient):
+            name_count_measure_of_one_ingredient = f.readline().split('|')
+            name = name_count_measure_of_one_ingredient[0]
+            quantity = name_count_measure_of_one_ingredient[1].strip()
+            measure = name_count_measure_of_one_ingredient[2].strip()
 
-            name_of_ingredient = a[0] # далее задаем 3 переменные, которые требуются в условии задачи
-            quantity = a[1].strip() # здесь .strip() в основном нужен, чтобы \n убрать, которые нам .readline() автоматически ставит
-            measure = a[2].strip() # то же самое
+            dct_name_quantity_measure = {'ingredient_name': name, 'quantity': quantity, 'measure': measure}
+            final_variant_dish_description.append(dct_name_quantity_measure)
+            dict_of_all_ingredients_of_one_dish[name_of_specific_dish.strip()] = final_variant_dish_description
+            cook_book.update(dict_of_all_ingredients_of_one_dish)
 
-            final_variant_of_line = {'ingredient_name': name_of_ingredient, 'quantity': quantity, 'measure': measure}
-            final_variant_dish_description.append(final_variant_of_line) # добавляем в пустой словарь полное описание рецепта блюда
+        f.readline()
+        name_of_specific_dish = f.readline()
+pprint(cook_book)
 
-            dict_of_all_ingr_of_one_dish[row.strip()] = final_variant_dish_description # самый важный момент кода: у словаря первого уровня вложенности создаем ключи и значения. .strip() ставится для избежания \n. В качеслве ключа мы ставим row
-            cook_book.update(dict_of_all_ingr_of_one_dish)
 
-        f.readline() # задаем 'шаг' для считывания файла
-        row = f.readline() # прописываем и внутри цикла while, чем у нас будет являться row
-pprint(cook_book) # ГЛАВНАЯ ПРОВЕРКА ВСЕГО КОДА
+# ΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩΩ
+# My variant with detailed comments:
 
-#         pprint(count_of_ingr_in_recept) # проверяем count_of_ingr_in_recept
-#         pprint(dict_of_all_ingr_of_one_dish) # проверяем dict_of_all_ingr_of_one_dish
-#         pprint(final_variant_dish_description) # проверяем final_variant_dish_description
+# file_path = os.path.join(os.getcwd(), 'recipes.txt')
+# with open(file_path) as f:
+#     cook_book = {}  # создаем переменную-слварь для окончательного результата всей задачи
+#     name_of_specific_dish = f.readline()  # задаем питону читать первую строку. Тут у нас имя файла
+#
+#     while name_of_specific_dish:  # ставим условие: пока у нас в цикле while есть переменная, которая будет носить
+#         # название 'name_of_specific_dish', а таких по ходу задачи будет 4 шт.(4 названия блюда), мы
+#         # делаем следующие действия:
+#         count_of_ingredient = int(f.readline())  # сдвигаемся на строчку ниже и делаем из нее integer
+#         final_variant_dish_description = []  # пример {'ingredient_name': 'Яйцо ', 'measure': 'шт', 'quantity': '2'}
+#         dict_of_all_ingredients_of_one_dish = {}  # будет ключ name_of_specific_dish, а значением будет см.↑
+#
+#         for i in range(count_of_ingredient):  # итерируемся по кл-ву ингредиентов
+#             name_count_measure_of_one_ingredient = f.readline().split('|')  # сдвигаемся еще на одну строчку ниже
+#             name = name_count_measure_of_one_ingredient[0]
+#             quantity = name_count_measure_of_one_ingredient[1].strip()
+#             measure = name_count_measure_of_one_ingredient[2].strip()
+#
+#             dct_name_quantity_measure = {'ingredient_name': name, 'quantity': quantity, 'measure': measure}  # это
+#             # временный служебный словарь, чтобы его потом добавлять в final_variant_dish_description, а тот
+#             # в свою очередь добавлять в качестве value в dict_of_all_ingredients_of_one_dish
+#             final_variant_dish_description.append(dct_name_quantity_measure)
+#             dict_of_all_ingredients_of_one_dish[name_of_specific_dish.strip()] = final_variant_dish_description
+#             cook_book.update(dict_of_all_ingredients_of_one_dish)
+#
+#         #  когда все итерации в range(count_of_ingredient) закончились,
+#         f.readline()  # мы сдвигаемся еще на одну строчку ниже, так как у нас она пустая, ее тоже нужно пройти
+#         name_of_specific_dish = f.readline()  # затем сдвигаемся еще на строчку ниже и уже в
+#         # качестве name_of_specific_dish задаем текущую строчку
+# pprint(cook_book)
+
 
 
